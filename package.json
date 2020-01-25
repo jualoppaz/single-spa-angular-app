@@ -1,6 +1,7 @@
 {
   "name": "single-spa-angular-app",
   "version": "0.0.0",
+  "main": "dist/main-es2015.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -11,7 +12,6 @@
     "build:single-spa": "ng build --prod --deploy-url http://localhost:4200/",
     "serve:single-spa": "ng serve --disable-host-check --port 4200 --deploy-url http://localhost:4200/ --live-reload false"
   },
-  "private": true,
   "dependencies": {
     "@angular-builders/custom-webpack": "^8",
     "@angular/common": "~8.2.14",
