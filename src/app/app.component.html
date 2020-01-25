@@ -1,6 +1,14 @@
-<div>
+<div id="app-component">
   <h1><img src="https://angular.io/assets/images/logos/angular/angular.png" width="50" height="50"> Angular App</h1>
+  <hr>
   <p>This is the Angular application main page. The router loads it when url is "/" but has the previous base
     with "/angular" context.
   </p>
+  <nav>
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:
+      true}">List</a>
+    <a routerLink="/detail" routerLinkActive="active" [routerLinkActiveOptions]="{exact:
+      true}">Detail</a>
+  </nav>
+  <router-outlet></router-outlet>
 </div>
