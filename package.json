@@ -1,6 +1,6 @@
 {
   "name": "single-spa-angular-app",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/main-es2015.js",
   "scripts": {
     "ng": "ng",
