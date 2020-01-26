@@ -1,1 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
+div#angular-app{
+  app-root{
+    display: block;
+    padding: 77px 0 77px 150px;
+  }
+}
