@@ -21,7 +21,7 @@ import { EmptyRouteComponent } from './empty-route/empty-route.component';
     AppRoutingModule,
   ],
   providers: [
-    {provide: APP_BASE_HREF, useValue: '/angular'}
+    {provide: APP_BASE_HREF, useValue: '/'}
   ],
   bootstrap: [AppComponent]
 })
