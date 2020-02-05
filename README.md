@@ -1,4 +1,7 @@
-<img src="https://single-spa.js.org/img/logo-white-bgblue.svg" width="50" height="50">
+<p float="left">
+  <img src="https://single-spa.js.org/img/logo-white-bgblue.svg" width="50" height="50">
+  <img src="https://angular.io/assets/images/logos/angular/angular.png" width="50" height="50">
+</p>
 
 [![npm version](https://img.shields.io/npm/v/single-spa-angular-app.svg?style=flat-square)](https://www.npmjs.org/package/single-spa-angular-app)
 [![](https://data.jsdelivr.com/v1/package/npm/single-spa-angular-app/badge)](https://www.jsdelivr.com/package/npm/single-spa-angular-app)
