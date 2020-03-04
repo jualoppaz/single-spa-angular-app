@@ -216,7 +216,7 @@ The **lifecycles** object contains all **single-spa-angular** methods for the **
 ```json
 {
   "name": "single-spa-angular-app",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Angular v8 application with two example pages for be included in a single-spa application as registered app.",
   "main": "dist/main-es2015.js",
   "scripts": {
