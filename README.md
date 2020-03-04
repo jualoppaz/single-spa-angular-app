@@ -221,7 +221,6 @@ The **lifecycles** object contains all **single-spa-angular** methods for the **
   "main": "dist/main-es2015.js",
   "scripts": {
     "ng": "ng",
-    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "build:single-spa": "ng build --prod"
