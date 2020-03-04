@@ -30,6 +30,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('single-spa-angular-app app is running!');
+    expect(compiled.querySelector('#app-component h1').textContent).toContain(' Angular App');
   });
 });

@@ -1,17 +1,13 @@
 {
   "name": "single-spa-angular-app",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Angular v8 application with two example pages for be included in a single-spa application as registered app.",
   "main": "dist/main-es2015.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "build:single-spa": "ng build --prod",
-    "serve:single-spa": "ng serve --disable-host-check --port 4200 --deploy-url http://localhost:4200/ --live-reload false"
+    "build:single-spa": "ng build --prod"
   },
   "dependencies": {
     "@angular-builders/custom-webpack": "8.4.1",
