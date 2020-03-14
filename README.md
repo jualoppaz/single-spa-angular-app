@@ -20,6 +20,8 @@ There are several files for the right working of this application and they are:
 
 - angular.json
 - extra-webpack.config.ts
+- src/app/app.module.ts
+- src/app/app-routing.module.ts
 - src/main.single-spa.ts
 - package.json
 
@@ -176,6 +178,53 @@ module.exports = (angularWebpackConfig, options) => {
 ```
 
 This file has no custom config. But we must set desired config here if needed.
+
+### src/app/app.module.ts
+
+```javascript
+import { AppComponent } from './app.component';
+
+import {APP_BASE_HREF} from '@angular/common';
+import { ListComponent } from './list/list.component';
+    BrowserModule,
+    AppRoutingModule,
+  ],
+  providers: [
+    {provide: APP_BASE_HREF, useValue: '/'}
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+As this application will be mounted when browser url starts with **/angular**, we need to **provide** the **APP_BASE_HREF** property with **/angular** value. However, as is documented [here](https://single-spa.js.org/docs/ecosystem-angular#configure-routes), this config causes strange behaviours in angular router when navigating between registered apps.
+
+A simple way of avoid this is set **/** as value of **APP_BASE_HREF** property and repeat **angular** prefix in all routes as you can see in **app-routing.module.ts** file.
+
+### src/app/app-routing.module.ts
+
+```javascript
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+import {ListComponent} from './list/list.component';
+import {DetailComponent} from './detail/detail.component';
+import {EmptyRouteComponent} from './empty-route/empty-route.component';
+
+const routes: Routes = [
+  { path: 'angular', component: ListComponent },
+  { path: 'angular/detail',      component: DetailComponent },
+  { path: '**', component: EmptyRouteComponent }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+
+As it is explained in **src/app/app.module.ts** section we need to add **angular** prefix in every routes.
 
 ### src/main.single-spa.ts
 
