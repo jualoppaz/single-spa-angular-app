@@ -18,12 +18,95 @@ This is an Angular v8 application which contains two routed pages for embbed the
 
 There are several files for the right working of this application and they are:
 
-- angular.json
-- extra-webpack.config.ts
 - src/app/app.module.ts
 - src/app/app-routing.module.ts
 - src/main.single-spa.ts
+- angular.json
+- extra-webpack.config.ts
 - package.json
+
+This file has no custom config. But we must set desired config here if needed.
+
+### src/app/app.module.ts
+
+```javascript
+import { AppComponent } from './app.component';
+
+import {APP_BASE_HREF} from '@angular/common';
+import { ListComponent } from './list/list.component';
+    BrowserModule,
+    AppRoutingModule,
+  ],
+  providers: [
+    {provide: APP_BASE_HREF, useValue: '/'}
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+As this application will be mounted when browser url starts with **/angular**, we need to **provide** the **APP_BASE_HREF** property with **/angular** value. However, as is documented [here](https://single-spa.js.org/docs/ecosystem-angular#configure-routes), this config causes strange behaviours in angular router when navigating between registered apps.
+
+A simple way of avoid this is set **/** as value of **APP_BASE_HREF** property and repeat **angular** prefix in all routes as you can see in **app-routing.module.ts** file.
+
+### src/app/app-routing.module.ts
+
+```javascript
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+import {ListComponent} from './list/list.component';
+import {DetailComponent} from './detail/detail.component';
+import {EmptyRouteComponent} from './empty-route/empty-route.component';
+
+const routes: Routes = [
+  { path: 'angular', component: ListComponent },
+  { path: 'angular/detail',      component: DetailComponent },
+  { path: '**', component: EmptyRouteComponent }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+
+As it is explained in **src/app/app.module.ts** section we need to add **angular** prefix in every routes.
+
+### src/main.single-spa.ts
+
+```javascript
+import { enableProdMode, NgZone } from '@angular/core';
+
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { Router } from '@angular/router';
+import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
+import singleSpaAngular from 'single-spa-angular';
+import { singleSpaPropsSubject } from './single-spa/single-spa-props';
+
+if (environment.production) {
+  enableProdMode();
+}
+
+const lifecycles = singleSpaAngular({
+  bootstrapFunction: singleSpaProps => {
+    singleSpaPropsSubject.next(singleSpaProps);
+    return platformBrowserDynamic().bootstrapModule(AppModule);
+  },
+  template: '<app-root />',
+  Router,
+  NgZone,
+  domElementGetter: () => document.getElementById('angular-app')
+});
+
+export const bootstrap = lifecycles.bootstrap;
+export const mount = lifecycles.mount;
+export const unmount = lifecycles.unmount;
+```
+
+The **lifecycles** object contains all **single-spa-angular** methods for the **single-spa** lifecycle of this app. All used config is default one but the custom config of the **domElementGetter** option. It's assumed that an element with **angular-app** id is defined in the **index.html** where this application will be mounted.
 
 ### angular.json
 ```json
@@ -176,89 +259,6 @@ module.exports = (angularWebpackConfig, options) => {
   return singleSpaWebpackConfig
 }
 ```
-
-This file has no custom config. But we must set desired config here if needed.
-
-### src/app/app.module.ts
-
-```javascript
-import { AppComponent } from './app.component';
-
-import {APP_BASE_HREF} from '@angular/common';
-import { ListComponent } from './list/list.component';
-    BrowserModule,
-    AppRoutingModule,
-  ],
-  providers: [
-    {provide: APP_BASE_HREF, useValue: '/'}
-  ],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
-```
-
-As this application will be mounted when browser url starts with **/angular**, we need to **provide** the **APP_BASE_HREF** property with **/angular** value. However, as is documented [here](https://single-spa.js.org/docs/ecosystem-angular#configure-routes), this config causes strange behaviours in angular router when navigating between registered apps.
-
-A simple way of avoid this is set **/** as value of **APP_BASE_HREF** property and repeat **angular** prefix in all routes as you can see in **app-routing.module.ts** file.
-
-### src/app/app-routing.module.ts
-
-```javascript
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-
-import {ListComponent} from './list/list.component';
-import {DetailComponent} from './detail/detail.component';
-import {EmptyRouteComponent} from './empty-route/empty-route.component';
-
-const routes: Routes = [
-  { path: 'angular', component: ListComponent },
-  { path: 'angular/detail',      component: DetailComponent },
-  { path: '**', component: EmptyRouteComponent }
-];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }
-```
-
-As it is explained in **src/app/app.module.ts** section we need to add **angular** prefix in every routes.
-
-### src/main.single-spa.ts
-
-```javascript
-import { enableProdMode, NgZone } from '@angular/core';
-
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { Router } from '@angular/router';
-import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
-import singleSpaAngular from 'single-spa-angular';
-import { singleSpaPropsSubject } from './single-spa/single-spa-props';
-
-if (environment.production) {
-  enableProdMode();
-}
-
-const lifecycles = singleSpaAngular({
-  bootstrapFunction: singleSpaProps => {
-    singleSpaPropsSubject.next(singleSpaProps);
-    return platformBrowserDynamic().bootstrapModule(AppModule);
-  },
-  template: '<app-root />',
-  Router,
-  NgZone,
-  domElementGetter: () => document.getElementById('angular-app')
-});
-
-export const bootstrap = lifecycles.bootstrap;
-export const mount = lifecycles.mount;
-export const unmount = lifecycles.unmount;
-```
-
-The **lifecycles** object contains all **single-spa-angular** methods for the **single-spa** lifecycle of this app. All used config is default one but the custom config of the **domElementGetter** option. It's assumed that an element with **angular-app** id is defined in the **index.html** where this application will be mounted.
 
 ### package.json
 
